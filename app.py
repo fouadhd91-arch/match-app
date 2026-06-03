@@ -15,7 +15,7 @@ if "active_tab" not in st.session_state:
 if "parsed_bank_df" not in st.session_state:
     st.session_state.parsed_bank_df = None
 
-# كود CSS مخصص لضغط المسافات، تلوين الأزرار بنظام 3D، وحل مشكلة تداخل uploadpload بالكامل
+# كود CSS المطور بالكامل لضغط المسافات، تلوين الأزرار 3D، وحل مشكلة تداخل uploadpload بالكامل
 st.markdown("""
     <style>
     /* استيراد ودمج خط Cairo الاحترافي لجميع عناصر الويب */
@@ -32,13 +32,15 @@ st.markdown("""
         text-align: right; 
     }
     
-    /* إلغاء وضغط المساحات الفارغة والفراغات المتباعدة على الهاتف بالكامل */
+    /* إنزال محتوى الصفحة بالكامل للأسفل لتفادي الشريط العلوي وعرض أزرار التنقل بوضوح */
     .block-container {
-        padding-top: 0.5rem !important;
+        padding-top: 5rem !important; /* دفع الأزرار للأسفل لتظهر واضحة تماماً */
         padding-bottom: 0.5rem !important;
         padding-left: 0.4rem !important;
         padding-right: 0.4rem !important;
     }
+    
+    /* ضغط الفراغات والمساحات الفارغة المتباعدة على الهاتف بالكامل */
     div[data-testid="stVerticalBlock"] > div {
         padding-top: 1px !important;
         padding-bottom: 1px !important;
@@ -46,7 +48,7 @@ st.markdown("""
         margin-bottom: 1px !important;
     }
     div[data-testid="stVerticalBlock"] {
-        gap: 4px !important;
+        gap: 3px !important;
     }
     
     /* إجبار أزرار ومربعات الهاتف على البقاء أفقياً (جنب بعض) دون أن تتراكم عمودياً */
@@ -60,103 +62,123 @@ st.markdown("""
         flex: 1 !important;
     }
     
-    /* أزرار التنقل العلوية - تصميم 3D مميز ومختلف الألوان */
-    /* الزر الفعال (المضغوط عليه حالياً) يظهر باللون الأخضر الثري */
-    .btn-active button {
+    /* تصميم أزرار التنقل العلوية ثلاثية الأبعاد (3D) ومختلفة الألوان بدقة */
+    /* الزر الفعال (المضغوط عليه حالياً) يظهر باللون الأخضر الجذاب */
+    .btn-active div[data-testid="stButton"] button {
         background-color: #2e7d32 !important; 
         color: white !important;
-        font-size: 14px !important;
+        font-size: 15px !important;
         height: 2.8em !important;
         font-weight: bold !important;
         border-radius: 10px !important;
         border: none !important;
-        box-shadow: 0 4px 0 #1b5e20, 0 6px 8px rgba(0,0,0,0.2) !important; /* تأثير ثلاثي الأبعاد */
+        box-shadow: 0 4px 0 #1b5e20, 0 6px 8px rgba(0,0,0,0.25) !important; /* تأثير ثلاثي الأبعاد */
         transform: translateY(-2px) !important;
     }
-    .btn-active button:active {
+    .btn-active div[data-testid="stButton"] button:active {
         transform: translateY(1px) !important;
         box-shadow: 0 1px 0 #1b5e20 !important;
     }
     
-    /* الزر غير الفعال (الآخر) يظهر باللون الأحمر الثري */
-    .btn-inactive button {
+    /* الزر غير الفعال (الآخر) يظهر باللون الأحمر الجذاب */
+    .btn-inactive div[data-testid="stButton"] button {
         background-color: #c62828 !important; 
         color: white !important;
-        font-size: 14px !important;
+        font-size: 15px !important;
         height: 2.8em !important;
         font-weight: bold !important;
         border-radius: 10px !important;
         border: none !important;
-        box-shadow: 0 4px 0 #8e0000, 0 6px 8px rgba(0,0,0,0.2) !important; /* تأثير ثلاثي الأبعاد */
+        box-shadow: 0 4px 0 #8e0000, 0 6px 8px rgba(0,0,0,0.25) !important; /* تأثير ثلاثي الأبعاد */
         transform: translateY(-2px) !important;
     }
-    .btn-inactive button:active {
+    .btn-inactive div[data-testid="stButton"] button:active {
         transform: translateY(1px) !important;
         box-shadow: 0 1px 0 #8e0000 !important;
     }
     
-    /* زر البحث الأخضر - تصميم 3D */
-    .search-btn-container button {
+    /* زر البحث الأخضر - تصميم ثلاثي الأبعاد 3D */
+    .search-btn-container div[data-testid="stButton"] button {
         background-color: #4caf50 !important;
         color: white !important;
-        font-size: 15px !important;
-        height: 2.5em !important;
+        font-size: 16px !important;
+        height: 2.6em !important;
         font-weight: bold !important;
         border-radius: 8px !important;
         border: none !important;
         box-shadow: 0 4px 0 #1b5e20, 0 5px 6px rgba(0,0,0,0.15) !important;
         transform: translateY(-2px) !important;
     }
-    .search-btn-container button:active {
+    .search-btn-container div[data-testid="stButton"] button:active {
         transform: translateY(1px) !important;
         box-shadow: 0 1px 0 #1b5e20 !important;
     }
     
-    /* زر المقارنة البرتقالي - تصميم 3D */
-    .compare-btn-container button {
+    /* زر مقارنة التأمين البرتقالي - تصميم ثلاثي الأبعاد 3D */
+    .compare-btn-container div[data-testid="stButton"] button {
         background-color: #ff9800 !important;
         color: white !important;
         font-size: 16px !important;
-        height: 2.8em !important;
+        height: 3em !important;
         font-weight: bold !important;
         border-radius: 8px !important;
         border: none !important;
         box-shadow: 0 4px 0 #e65100, 0 5px 6px rgba(0,0,0,0.15) !important;
         transform: translateY(-2px) !important;
     }
-    .compare-btn-container button:active {
+    .compare-btn-container div[data-testid="stButton"] button:active {
         transform: translateY(1px) !important;
         box-shadow: 0 1px 0 #e65100 !important;
     }
     
     /* حل مشكلة تداخل وتكرار كلمة upload وإخفاء التفاصيل الإنجليزية الزائدة */
     div[data-testid="stFileUploader"] section {
-        padding: 6px !important;
+        padding: 8px !important;
         background-color: #1a1c1e !important;
         border: 2px dashed #4caf50 !important;
         border-radius: 8px !important;
     }
+    /* إخفاء النص الداخلي للزر الافتراضي */
     div[data-testid="stFileUploader"] section button {
-        background-color: #4caf50 !important;
-        color: white !important;
-        font-weight: bold !important;
-        border-radius: 6px !important;
-        border: none !important;
-        box-shadow: 0 3px 0 #1b5e20 !important; /* زر رفع 3D */
+        font-size: 0 !important;
+        height: 2.4em !important;
+        padding: 0 15px !important;
     }
     /* إخفاء نصوص الرفع الإنجليزية المتداخلة تلقائياً */
     div[data-testid="stFileUploader"] section > div {
         display: none !important;
     }
-    /* استبدالها بجملة إرشادية عربية واحدة ونظيفة */
-    div[data-testid="stFileUploader"] section::after {
-        content: "اضغط هنا لاختيار الملف" !important;
+    /* استبدال نصوص الرفع بجمل إرشادية عربية نظيفة وخالية من التداخل */
+    .pdf-uploader div[data-testid="stFileUploader"] section button::after {
+        content: "اختيار كشف الحساب" !important;
+        font-size: 14px !important;
+        color: white !important;
+        font-family: 'Cairo', sans-serif !important;
+        display: block !important;
+    }
+    .pdf-uploader div[data-testid="stFileUploader"] section::after {
+        content: "اضغط هنا لاختيار ملف الـ PDF" !important;
         display: block !important;
         color: #aaa !important;
         font-size: 13px !important;
         text-align: center !important;
         margin-top: 6px !important;
+    }
+    
+    .excel-uploader div[data-testid="stFileUploader"] section button::after {
+        content: "اختيار ملف الإكسل" !important;
+        font-size: 14px !important;
+        color: white !important;
         font-family: 'Cairo', sans-serif !important;
+        display: block !important;
+    }
+    .excel-uploader div[data-testid="stFileUploader"] section::after {
+        content: "اضغط هنا لاختيار ملف الـ Excel" !important;
+        display: block !important;
+        color: #aaa !important;
+        font-size: 13px !important;
+        text-align: center !important;
+        margin-top: 6px !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -223,8 +245,6 @@ def parse_turkish_bank_pdf(pdf_file):
     df["Tutar_Clean"] = df["Tutar"].str.replace(" TL", "").str.replace(".", "").str.replace(",", ".").astype(float)
     df["İşlem Tarihi"] = pd.to_datetime(df["İşlem Tarihi"], format="%d.%m.%Y")
     
-    # المحافظة التامة على الترتيب الفعلي لـ PDF سطر بسطر
-    
     types = []
     for i in range(len(df)):
         desc = str(df.loc[i, "Açıklama"]).lower()
@@ -248,7 +268,7 @@ def parse_turkish_bank_pdf(pdf_file):
     return df
 
 
-# ==================== أزرار التنقل العلوية الكبيرة (جنب بعض أفقياً ومختلفة الألوان) ====================
+# ==================== أزرار التنقل العلوية الكبيرة الملونة 3D جنب بعض ====================
 st.write(" ")
 col_nav1, col_nav2 = st.columns(2)
 
@@ -275,15 +295,16 @@ st.write("---")
 
 # ==================== الصفحة الأولى: كشف الحساب البنكي ====================
 if st.session_state.active_tab == "bank":
-    st.markdown("<h4 style='font-size: 16px; font-weight: bold; margin-bottom: 2px;'>كشف الحوالات</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='font-size: 15px; font-weight: bold; margin-bottom: 2px;'>كشف الحوالات</h4>", unsafe_allow_html=True)
     
     col_file, col_btn = st.columns([3, 1])
     
     with col_file:
-        bank_file = st.file_uploader("رفع الملف", type=["pdf"], key="bank_pdf_uploader")
+        st.markdown('<div class="pdf-uploader">', unsafe_allow_html=True)
+        bank_file = st.file_uploader("رفع الملف", type=["pdf"], key="bank_pdf_uploader", label_visibility="collapsed")
+        st.markdown('</div>', unsafe_allow_html=True)
         
     with col_btn:
-        st.write("##") # محاذاة
         st.markdown('<div class="search-btn-container">', unsafe_allow_html=True)
         search_clicked = st.button("🔍 بحث", key="search_bank_btn", use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
@@ -302,7 +323,7 @@ if st.session_state.active_tab == "bank":
     if st.session_state.parsed_bank_df is not None:
         df_bank = st.session_state.parsed_bank_df
         
-        st.markdown("<h4 style='font-size: 14px; font-weight: bold; margin-bottom: 1px;'>🔍 فلتر</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 13px; font-weight: bold; margin-bottom: 1px;'>🔍 فلتر</h4>", unsafe_allow_html=True)
         col1, col2, col3 = st.columns(3)
         with col1:
             start_date = st.date_input("من تاريخ", df_bank["İşlem Tarihi"].min().date(), key="b_start")
@@ -326,20 +347,20 @@ if st.session_state.active_tab == "bank":
         total_count = len(filtered_df)
         total_sum = filtered_df["Tutar_Clean"].sum()
         
-        # عرض الإحصائيات في صندوقين مستقلين ملونين (أزرق صافي وأخضر صافي) وبدون أي رموز
+        # عرض الإحصائيات في صندوقين مستقلين ملونين بالكامل (أزرق صافي وأخضر صافي) وبدون أي رموز
         col_card1, col_card2 = st.columns(2)
         with col_card1:
             st.markdown(f"""
-                <div style="background-color: #1565c0; padding: 10px; border-radius: 8px; text-align: center; box-shadow: 0 4px 0 #0d47a1, 0 6px 8px rgba(0,0,0,0.15); margin-bottom: 10px;">
-                    <span style="color: #ffffff; font-size: 14px; font-weight: bold; display: block; margin-bottom: 2px;">العدد</span>
-                    <span style="color: #ffffff; font-size: 20px; font-weight: bold;">{total_count} حركة</span>
+                <div style="background-color: #1565c0; padding: 10px; border-radius: 8px; text-align: center; box-shadow: 0 4px 0 #0d47a1, 0 6px 8px rgba(0,0,0,0.15); margin-bottom: 8px;">
+                    <span style="color: #ffffff; font-size: 13px; font-weight: bold; display: block; margin-bottom: 1px;">العدد</span>
+                    <span style="color: #ffffff; font-size: 18px; font-weight: bold;">{total_count} حركة</span>
                 </div>
             """, unsafe_allow_html=True)
         with col_card2:
             st.markdown(f"""
-                <div style="background-color: #2e7d32; padding: 10px; border-radius: 8px; text-align: center; box-shadow: 0 4px 0 #1b5e20, 0 6px 8px rgba(0,0,0,0.15); margin-bottom: 10px;">
-                    <span style="color: #ffffff; font-size: 14px; font-weight: bold; display: block; margin-bottom: 2px;">مبلغ الحوالات</span>
-                    <span style="color: #ffffff; font-size: 20px; font-weight: bold;">{total_sum:,.2f} TL</span>
+                <div style="background-color: #2e7d32; padding: 10px; border-radius: 8px; text-align: center; box-shadow: 0 4px 0 #1b5e20, 0 6px 8px rgba(0,0,0,0.15); margin-bottom: 8px;">
+                    <span style="color: #ffffff; font-size: 13px; font-weight: bold; display: block; margin-bottom: 1px;">مبلغ الحوالات</span>
+                    <span style="color: #ffffff; font-size: 18px; font-weight: bold;">{total_sum:,.2f} TL</span>
                 </div>
             """, unsafe_allow_html=True)
             
@@ -348,19 +369,25 @@ if st.session_state.active_tab == "bank":
             "اسم الشخص الذي حوّل": filtered_df["اسم المحوّل"],
             "مبلغ الحوالة": filtered_df["Tutar"]
         })
-        st.markdown("<h4 style='font-size: 13px; font-weight: bold; margin-bottom: 2px; margin-top: 10px;'>📋 الحوالات:</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-size: 12px; font-weight: bold; margin-bottom: 1px; margin-top: 5px;'>📋 الحوالات:</h4>", unsafe_allow_html=True)
         st.dataframe(display_df, use_container_width=True)
 
 
 # ==================== الصفحة الثانية: مطابقة ملفات التأمين ====================
 elif st.session_state.active_tab == "insurance":
-    st.markdown("<h4 style='font-size: 16px; font-weight: bold; margin-bottom: 10px;'>مطابقة ملفات التأمين</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='font-size: 15px; font-weight: bold; margin-bottom: 10px;'>مطابقة ملفات التأمين</h4>", unsafe_allow_html=True)
     
     col_up1, col_up2 = st.columns(2)
     with col_up1:
-        file1 = st.file_uploader("رفع ملف الأكسل (الاول):", type=["xlsx", "xls"], key="file1_up")
+        st.markdown("<h5 style='font-size: 13px; font-weight: bold; margin-bottom: 2px;'>رفع ملف الأكسل (الأول)</h5>", unsafe_allow_html=True)
+        st.markdown('<div class="excel-uploader">', unsafe_allow_html=True)
+        file1 = st.file_uploader("الأول", type=["xlsx", "xls"], key="file1_up", label_visibility="collapsed")
+        st.markdown('</div>', unsafe_allow_html=True)
     with col_up2:
-        file2 = st.file_uploader("رفع ملف الأكسل (الثاني):", type=["xlsx", "xls"], key="file2_up")
+        st.markdown("<h5 style='font-size: 13px; font-weight: bold; margin-bottom: 2px;'>رفع ملف الأكسل (الثاني)</h5>", unsafe_allow_html=True)
+        st.markdown('<div class="excel-uploader">', unsafe_allow_html=True)
+        file2 = st.file_uploader("الثاني", type=["xlsx", "xls"], key="file2_up", label_visibility="collapsed")
+        st.markdown('</div>', unsafe_allow_html=True)
         
     if file1 and file2:
         try:
